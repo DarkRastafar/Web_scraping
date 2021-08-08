@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup
 total_pages = 51
 count_pages = 0
 
+
 headers = {
 	"user-agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36"
 	}
@@ -15,6 +16,7 @@ domain = "https://www.xcomspb.ru"
 data_list_collection = []
 
 
+@logger.catch
 def logger_get_pages():
 	global count_pages
 	global total_pages
@@ -23,6 +25,7 @@ def logger_get_pages():
 	return logger.info(f"Страниц загружено ->>{count_pages}, страниц осталось ->>{total_pages}")
 
 
+@logger.catch
 def reset_global_count_and_total():
 	global count_pages
 	global total_pages
@@ -30,6 +33,7 @@ def reset_global_count_and_total():
 	count_pages = 0
 
 
+@logger.catch
 def logger_get_data():
 	global count_pages
 	global total_pages
@@ -41,6 +45,7 @@ def logger_get_data():
 		return logger.info("Сбор данных окончен!")
 
 
+@logger.catch
 def check_time(func):
 	def wrapper(*args, **kwargs):
 		start = dt.now()
@@ -49,6 +54,7 @@ def check_time(func):
 	return wrapper
 
 
+@logger.catch
 @check_time
 def get_pages(url):
 	for number_page in range(1, 52):
@@ -61,6 +67,7 @@ def get_pages(url):
 	reset_global_count_and_total()
 
 
+@logger.catch
 @check_time
 def get_data():
 	for number_page in range(1, 52):
@@ -138,10 +145,12 @@ def get_data():
 		logger_get_data()
 
 
+@logger.catch
 @check_time
 def facad_parser():
 	get_pages("https://www.xcomspb.ru/search/kompyuter_i_kompyuternaya_platforma/?o=n&s=%D0%9A%D0%BE%D0%BC%D0%BF%D1%8C%D1%8E%D1%82%D0%B5%D1%80")
 	get_data()
+
 
 if __name__ == "__main__":
 	facad_parser()

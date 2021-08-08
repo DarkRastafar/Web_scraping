@@ -17,6 +17,7 @@ DOMAIN = "https://www.xcomspb.ru"
 data_list_collection = []
 
 
+@logger.catch
 def logger_get_data():
 	global count_pages
 	global total_pages
@@ -28,6 +29,7 @@ def logger_get_data():
 		return logger.info("Сбор данных окончен!")
 
 
+@logger.catch
 def check_time(func):
 	def wrapper(*args, **kwargs):
 		start = dt.now()
@@ -37,6 +39,7 @@ def check_time(func):
 	return wrapper
 
 
+@logger.catch
 async def get_page_data(session, number_page):
 	url = f"https://www.xcomspb.ru/search/kompyuter_i_kompyuternaya_platforma/?o=n&s=%D0%9A%D0%BE%D0%BC%D0%BF%D1%8C%D1%8E%D1%82%D0%B5%D1%80&search_page={number_page}"
 	
@@ -106,7 +109,7 @@ async def get_page_data(session, number_page):
 		logger_get_data()
 
 
-
+@logger.catch
 async def gather_data():
 	async with aiohttp.ClientSession() as session:
 		tasks = []
@@ -118,11 +121,13 @@ async def gather_data():
 		await asyncio.gather(*tasks)
 
 
+@logger.catch
 def write_data(data_list_collection):
 	with open("data_result/data_list.json", "a", encoding="utf-8") as file:
 		json.dump(data_list_collection, file, indent=4, ensure_ascii=False)
 
 
+@logger.catch
 @check_time
 def facad_parser():
 	asyncio.run(gather_data())
